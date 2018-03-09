@@ -1,23 +1,40 @@
 const serialport = require('serialport')
-const request    = require('./lib/request')
+const io = require('socket.io-client')
 
-void async function() {
-    let portInfo = (await serialport.list())[0]
+// replace address with the legit one later
+const socket = io('http://localhost:8080')
 
-    const parser = new serialport.parsers.Readline('\n')
+/*
+    Features needed:
+    Offine Support
+    Disconnect/Reconnect Logic
+    Data Validation
+*/
 
-    const serial = new serialport(portInfo.comName, {
-        baudRate: 9600
-    })
+// socket.on('connect', function() {});
+// socket.on('event', function(data) {});
+// socket.on('disconnect', function() {});
 
-    serial.pipe(parser)
+// void async function() {
+//     let portInfo = (await serialport.list())[0]
 
-    parser.on('data', async data => {
-        try {
-            await request.post('http://localhost:8000/', { body: data } )
-            console.log('Sent: %s', data)
-        } catch(e) {
-            console.log('Error sending!')
-        }
-    })
-}().catch(console.log)
+//     console.log(portInfo)
+
+//     const parser = new serialport.parsers.Readline('\n')
+
+//     const serial = new serialport(portInfo.comName, {
+//         baudRate: 9600
+//     })
+
+//     serial.pipe(parser)
+
+//     parser.on('data', async data => {
+//         data = data.trim()
+
+//         axios.post('http://localhost:8000', { data })
+//             .then(response => {
+//                 console.log(response.data)
+//             })
+//             .catch(console.error)
+//     })
+// }().catch(console.log)
