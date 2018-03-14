@@ -4,14 +4,6 @@ const io = require('socket.io-client')
 // replace address with the legit one later
 const socket = io('http://localhost:8080')
 
-socket.on('accept', (data) => {
-	// Card accepted
-})
-
-socket.on('reject', (data) => {
-	// Card rejected
-})
-
 void async function() {
     let portInfo = (await serialport.list())[0]
 
@@ -27,7 +19,14 @@ void async function() {
 
     parser.on('data', async data => {
         data = data.trim()
-
         socket.emit('card read', data)
+    })
+
+    socket.on('accept', async data => {
+        serial.write('1\n')
+    })
+
+    socket.on('reject', async data => {
+        serial.write('2\n')
     })
 }().catch(console.log)
