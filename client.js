@@ -3,30 +3,22 @@ const io = require('socket.io-client')
 
 // replace address with the legit one later
 const socket = io('http://localhost:8080')
+const acceptMap = new Map()
+
+acceptMap.set('0BADB079', true);
 
 void async function() {
-    let portInfo = (await serialport.list())[0]
-
-    console.log(portInfo)
-
+    const portInfo = (await serialport.list())[0]
     const parser = new serialport.parsers.Readline('\n')
-
-    const serial = new serialport(portInfo.comName, {
-        baudRate: 9600
-    })
+    const serial = new serialport(portInfo.comName, { baudRate: 9600 })
 
     serial.pipe(parser)
+    parser.on('data', async rawData => {
+        let data = rawData.trim()
+        let accept = Boolean(acceptMap.get(data))
 
-    parser.on('data', async data => {
-        data = data.trim()
+        serial.write(accept ? 'accept\n' : 'reject\n')
         socket.emit('card read', data)
     })
-
-    socket.on('accept', async data => {
-        serial.write('1\n')
-    })
-
-    socket.on('reject', async data => {
-        serial.write('2\n')
-    })
 }().catch(console.log)
+
