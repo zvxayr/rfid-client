@@ -5,7 +5,7 @@ const io = require('socket.io-client')
 const socket = io('http://localhost:8080')
 const acceptMap = new Map()
 
-acceptMap.set('0BADB079', true);
+acceptMap.set('0BADB079', true)
 
 void async function() {
     const portInfo = (await serialport.list())[0]
@@ -21,4 +21,3 @@ void async function() {
         socket.emit('card read', data)
     })
 }().catch(console.log)
-
