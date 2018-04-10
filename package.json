@@ -11,13 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^5.0.1",
-    "node-fetch": "^1.7.3",
     "serialport": "^6.0.4",
-    "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4"
   },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-nodemon": "^2.2.1"
-  }
+  "devDependencies": {}
 }
